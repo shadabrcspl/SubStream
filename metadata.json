@@ -1,0 +1,5 @@
+{
+  "name": "SubStream Translator",
+  "description": "Professional SRT subtitle translator with YouTube integration using Gemini AI.",
+  "requestFramePermissions": []
+}
