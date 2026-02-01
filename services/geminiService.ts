@@ -1,18 +1,20 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { SubtitleBlock, VerificationResult, VerificationItem } from "../types";
 
-const API_KEY = process.env.API_KEY || '';
-
-const ai = new GoogleGenAI({ apiKey: API_KEY });
+const getAiClient = () => {
+  const apiKey = localStorage.getItem('gemini_api_key') || process.env.API_KEY;
+  if (!apiKey) {
+    throw new Error("API Key is missing. Please set it in the top right settings.");
+  }
+  return new GoogleGenAI({ apiKey });
+};
 
 export const translateSubtitles = async (
   blocks: SubtitleBlock[],
   sourceLanguage: string = 'Auto Detect',
   targetLanguage: string = 'English'
 ): Promise<SubtitleBlock[]> => {
-  if (!API_KEY) {
-    throw new Error("API Key is missing.");
-  }
+  const ai = getAiClient();
 
   // Use original text if available to avoid pivot translation errors when switching languages
   const textPayload = blocks.map(b => `[ID:${b.id}] ${b.originalText || b.text}`).join('\n');
@@ -80,9 +82,7 @@ export const verifySubtitleTranslation = async (
   sourceLanguage: string = 'Auto Detect',
   targetLanguage: string = 'English'
 ): Promise<VerificationResult> => {
-  if (!API_KEY) {
-    throw new Error("API Key is missing.");
-  }
+  const ai = getAiClient();
 
   // 1. Structural Comparison
   const verificationMap = new Map<number, Partial<VerificationItem>>();
@@ -213,7 +213,7 @@ export const getImprovedTranslation = async (
   sourceLanguage: string,
   targetLanguage: string = 'English'
 ): Promise<string> => {
-  if (!API_KEY) throw new Error("API Key missing");
+  const ai = getAiClient();
   
   let languageInstruction = `Target Language: ${targetLanguage}`;
   if (targetLanguage === "Hindi (Romanized)") {
