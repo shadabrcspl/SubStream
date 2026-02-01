@@ -6,6 +6,7 @@ import VideoPreview from './components/VideoPreview';
 import SubtitleViewer from './components/SubtitleViewer';
 import VerificationReport from './components/VerificationReport';
 import Button from './components/Button';
+import ApiKeyConfig from './components/ApiKeyConfig';
 import { SrtFile, TranslationState, VerificationResult } from './types';
 import { parseSRT } from './utils/srtUtils';
 import { translateSubtitles, verifySubtitleTranslation, getImprovedTranslation } from './services/geminiService';
@@ -200,9 +201,7 @@ const App: React.FC = () => {
             </div>
             <h1 className="text-xl font-bold tracking-tight">SubStream</h1>
           </div>
-          <div className="text-sm text-zinc-500 hidden sm:block">
-            Powered by Gemini AI
-          </div>
+          <ApiKeyConfig />
         </div>
       </header>
 
